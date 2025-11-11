@@ -1,0 +1,13 @@
+adaptive_os_simulator/.venv/
+.venv/
+*.pyc
+__pycache__/
+kernel_run_logs/
+*.egg-info/
+.env
+.vscode/
+.DS_Store
+*.pyc
+__pycache__/
+kernel_run_logs*/
+
