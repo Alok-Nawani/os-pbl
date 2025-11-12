@@ -1,13 +1,72 @@
+# Virtual Environments
 adaptive_os_simulator/.venv/
 .venv/
+venv/
+env/
+ENV/
+
+# Python Cache
 *.pyc
+*.pyo
+*.pyd
 __pycache__/
-kernel_run_logs/
+*.so
+*.egg
 *.egg-info/
-.env
+dist/
+build/
+
+# IDE and Editor
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
-*.pyc
-__pycache__/
+
+# Project Specific
+kernel_run_logs/
 kernel_run_logs*/
+
+# Model Files (large binary files)
+models/*.joblib
+adaptive_os_simulator/scripts/*.joblib
+
+# Plot Output Files
+adaptive_os_simulator/plots/*.png
+adaptive_os_simulator/plots/*.jpg
+adaptive_os_simulator/plots/*.pdf
+adaptive_os_simulator/plots/*.txt
+adaptive_os_simulator/plots/*.md
+adaptive_os_simulator/plots/*.csv
+
+# Environment Files
+.env
+.env.local
+
+# Logs
+*.log
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS Files
+Thumbs.db
+Desktop.ini
+
+# Temporary Files
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# Documentation Build
+docs/_build/
+site/
 
