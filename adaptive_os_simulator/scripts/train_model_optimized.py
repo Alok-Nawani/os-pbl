@@ -33,15 +33,8 @@ from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import (
-    classification_report, 
-    confusion_matrix, 
     accuracy_score,
     precision_recall_fscore_support,
-    roc_auc_score,
-    roc_curve,
-    auc,
-    mean_squared_error,
-    r2_score
 )
 
 from adaptive_os_simulator.backend.ml_model import save_model
@@ -236,6 +229,11 @@ def main() -> None:
     if not ext:
         ext = ".joblib"
     
+    # Encode labels for XGBoost (requires numeric labels)
+    le = LabelEncoder()
+    y_train_encoded = le.fit_transform(y_train)
+    y_test_encoded = le.transform(y_test)
+    
     results: Dict[str, Dict[str, float]] = {}
     trained_models: Dict[str, Any] = {}
     
@@ -243,20 +241,28 @@ def main() -> None:
     for name, model in models.items():
         print(f"{name:25s} → ", end='', flush=True)
         
+        # Use encoded labels for XGBoost, original for others
+        y_train_use = y_train_encoded if name == "XGBoost" else y_train
+        y_test_use = y_test_encoded if name == "XGBoost" else y_test
+        
         start_train = time.time()
-        model.fit(X_train, y_train)
+        model.fit(X_train, y_train_use)
         train_time = time.time() - start_train
         
         start_pred = time.time()
         y_pred = model.predict(X_test)
         predict_time = time.time() - start_pred
         
+        # Decode predictions for XGBoost back to original labels
+        if name == "XGBoost":
+            y_pred = le.inverse_transform(y_pred)
+        
         # Metrics
         acc = accuracy_score(y_test, y_pred)
         prec, rec, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='weighted', zero_division=0)
         
         # Cross-validation score
-        cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring='accuracy', n_jobs=-1)
+        cv_scores = cross_val_score(model, X_train, y_train_use, cv=5, scoring='accuracy', n_jobs=-1)
         cv_mean = cv_scores.mean()
         cv_std = cv_scores.std()
         

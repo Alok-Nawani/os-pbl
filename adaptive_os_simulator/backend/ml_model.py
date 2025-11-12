@@ -50,5 +50,3 @@ def load_model(path: str):
 
 def save_model(model, path: str) -> None:
     joblib.dump(model, path)
-
-
